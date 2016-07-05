@@ -6,7 +6,8 @@ using namespace std;
 #include <stdlib.h>
 #include <time.h>
 int main()
-{           srand (time(NULL));
+{           
+    srand (time(NULL));
 
     ifstream file("mincut.in");
     string str;
@@ -19,7 +20,7 @@ int main()
     {   a=0;
 
     if(str.length()==0){continue;}
-        //cout<<str<<endl;
+       
         for(int i=0;i<str.length();i++)
         {
 
@@ -43,7 +44,7 @@ int main()
 
     }
 
-    //cout<<graph.size()<<endl;
+    
 
 
 
@@ -79,10 +80,7 @@ int main()
             }
         }
 
-       // graph[x].erase(graph[x].begin()+y);
-
-
-        //cout<<edge<<" "<<node<<endl;
+      
 
         for(int m=0;m<graph.size();m++)
         {
@@ -103,7 +101,7 @@ int main()
             }
         }
 
-        //cout<<endl;
+        
         graph.erase(graph.begin()+j);//Delete graph[j]
 
 

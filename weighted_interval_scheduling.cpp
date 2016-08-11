@@ -5,9 +5,9 @@ using namespace std;
 
 struct job
 {
-	int i;
-	int f;
-	int w;
+	int i; //starting time
+	int f; // finishing time
+	int w;  //profit or weight
 };
 vector<bool> ans;
 

@@ -3,54 +3,43 @@
 #include<algorithm>
 #include<iostream>
 using namespace std;
+#include<stack>
 
 
 
 const long long n=875715;   //number of nodes +1....since 0th location wasted
 
 vector<bool> explored;
+
 int t=0;
 long long z;
-vector<long long> f_time;
-vector<long long> f;
 
 
-void dfs_t(vector<vector<int> >g,int i)
+void dfs(vector< vector<int> > g, int s,stack<int> &s)
 {
-    explored[i]=true;
-
-    for(int j=0;j<g[i].size();j++)
-    {
-        if(!explored[g[i][j]])
-        {
-            dfs_t(g,g[i][j]);
-        }
-
-    }
-    t++;
-    f_time[t]=i;
-    f[i]=t;
+	explored[s]=true;
+	for(int i=0;i<g[s].size();i++)
+	{
+		if(!explored[g[s][i]]){dfs(g,g[s][i],s);}
+	}
+	s.push(s);
 }
 
-void dfs_s(vector<vector<int> >g,int i)
+void dfs_rev(vector< vector<int> > g,int s,vector<int> temp)
 {
-    explored[i]=true;
-    for(int j=0;j<g[i].size();j++)
-    {
-        if(!explored[g[i][j]])
-        {
-            dfs_s(g,g[i][j]);
-        }
-
-    }
-    z++;
-
+	explored[s]=true;
+	temp.push_back(s);
+	for(int i=0;i<g[s].size();i++)
+	{
+		if(!explored[g[s][i]]){dfs_rev(g,g[s][i],temp);}
+	}
 }
+
 int main()
 {
-    cout<<"hey";
+    cout<<"starting the program";
     vector<vector<int> > g;
-    vector<long long> ans;
+   
     vector<vector<int> >g_rev;
     vector<vector<int> >final;
     vector<int> temp;
@@ -65,7 +54,7 @@ int main()
     }
 
 
-    for(int i=0;i<n;i++){explored.push_back(false);}
+   for(int i=0;i<n;i++){explored.push_back(false); }
 
    ifstream file("SCC.txt");
    string str;
@@ -123,61 +112,27 @@ int main()
        }
        cout<<endl;
    }*/
-
-   int t=0;//finishing time
-   cout<<done;
-
-   for(long long i=n-1;i>=1;i--)
+	
+   stack<int> s;
+   for(i=1;i<n;i++)
    {
-       if(!explored[i])
-       {
-           dfs_t(g_rev,i);
-       }
+	if(!explored[i]){dfs(g,i,stack);}
    }
-   for(int i=1;i<n;i++)
+
+
+   for(int i=0;i<n;i++){explored.push_back(false); }
+   vector< vector<int> > answer;
+   vector<int> tempp;
+
+   while(!s.empty())
    {
-       final[i].clear();
-       for(int j=0;j<g[f_time[i]].size();j++)
-       {
-
-             final[i].push_back(f[g[f_time[i]][j]]);
-       }
-
+	int v=s.top();
+	s.pop();
+	if(!explored[v]){dfs_rev(g_rev,v,tempp); answer.push_back(tempp);tempp.clear();}
    }
-   cout<<"final graph with reversed and finishing times"<<endl;
-   /*
-   for(int i=1;i<n;i++)
-   {
-       cout<<i<<"    ->";
-       for(int j=0;j<final[i].size();j++)
-       {
-           cout<<final[i][j]<<" ";
-       }
-       cout<<endl;
-   }
-   */
-    for(int i=0;i<n;i++){explored[i]=false;}
-   z=0;
-   for(int i=n-1;i>=1;i--)
-   {
 
-       if(!explored[i])
-       {
-           dfs_s(final,i);
-           ans.push_back(z);
-           z=0;
-       }
-
-   }
-   sort(ans.begin(),ans.end(),greater<int>());
-
-   for(int i=0;i<5;i++)
-   {
-       if(i<ans.size())
-       {
-           cout<<ans[i]<<" ";
-       }
-   }
+   
+  
 
 
 

@@ -29,7 +29,7 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 		{
 			//cout<<"edge "<<g[n][i]<<endl;
 			
-			if(visited[g[n][i]]==1&&q.size()==0){return ;}
+			if(visited[g[n][i]]==1&&q.size()==0){break ;}
 			
 			if(visited[g[n][i]]==0)
 			{
@@ -40,14 +40,16 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 				cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
 			}
 			
-
+			
 		}
+		
 		
 	}
 	
 	int temp;
 	int flag=0;
 	map<int,vector<int> >::iterator it = g.begin();
+	
 	for(;it!=g.end();++it)
 	{
 		//paths[x][n]=p;
@@ -59,13 +61,13 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 		while(temp!=x)
 		{
 			temp=pred[temp];
-			cout<<temp<<" ";
+			//cout<<temp<<" ";
 			p++;
-			if(temp==t->first){flag=1;break;}
+			if(temp==it->first){flag=1;break;}
 		}
-		if(flag==1){flag=0;paths[n][t->first]=-1;continue;}
-		paths[n][t->first]=p;
-		cout<<"path from "<<n<<"to"<<t->first<<"="<<p<<endl;
+		if(flag==1){flag=0;paths[n][it->first]=-1;continue;}
+		paths[x][it->first]=p;
+		cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
 		p=0;
 	}
 	pred.clear();

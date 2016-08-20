@@ -4,9 +4,12 @@ using namespace std;
 #include <algorithm>
 #include <map>
 #include <list>
+#include <bits/stdc++.h>
 
 #define const 100;
-void bfs(map<int,vector<int> > g,int n,int paths[100][100])
+int paths[10000][10000];
+
+void bfs(map<int,vector<int> > g,int n)
 {
 	bool visited[100]={false};
 	
@@ -18,16 +21,17 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 	int x=n;
 	int z;
 	map<int,int> pred;
-	cout<<"traversing node"<<n<<endl;
+	//cout<<"traversing node"<<n<<endl;
 	while(!q.empty())
 	{
 		n=q.front();
 		q.pop_front();
-		
+		//cout<<"n "<<n<<endl;
 		
 		for(int i=0;i<g[n].size();i++)
 		{
-			//cout<<"edge "<<g[n][i]<<endl;
+			//cout<<"edge "<<g[n][i]<<" "<<q.size()<<endl;
+			//cout<<visited[g[n][i]]<<endl;
 			
 			if(visited[g[n][i]]==1&&q.size()==0){break ;}
 			
@@ -37,7 +41,7 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 				visited[g[n][i]]=true;
 				q.push_back(g[n][i]);
 				pred[g[n][i]]=n;
-				cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
+				//cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
 			}
 			
 			
@@ -51,10 +55,11 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 	map<int,vector<int> >::iterator it = g.begin();
 	
 	for(;it!=g.end();++it)
-	{
+	{	
 		//paths[x][n]=p;
 		
 		temp=it->first;
+		
 		if(temp==x){paths[n][x]=0;continue;}
 		
 		
@@ -65,14 +70,55 @@ void bfs(map<int,vector<int> > g,int n,int paths[100][100])
 			p++;
 			if(temp==it->first){flag=1;break;}
 		}
+
 		if(flag==1){flag=0;paths[n][it->first]=-1;continue;}
 		paths[x][it->first]=p;
-		cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
+		//cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
 		p=0;
-	}
-	pred.clear();
-}
 
+	}
+
+	pred.clear();
+	cout<<"x="<<x<<endl;
+	return;
+}
+int dp[1000][1000];
+void fill(int dirtt,int mask,vector<int> dirt_path)
+{
+	int min;
+	cout<<mask<<endl;
+	int count=0;
+	for(int l=0;l<dirtt;l++)
+	{
+		if(mask&(1<<l)){count++;}
+	}
+	if(count==dirtt-1){return;}
+	
+	
+	for(int i=0;i<dirtt;i++)
+	{
+		//to fill dp[mask]
+		
+		if(!(mask&(1<<i)))
+		{	
+			fill(dirtt,mask|(1<<i),dirt_path);
+			
+			min=1000000;
+			for(int j=0;j<dirtt;j++)
+			{
+				if(!(mask&(1<<j))&&j!=i&&paths[dirt_path[j]][dirt_path[i]]!=-1)
+				{
+					
+					if(dp[mask|(1<<i)][j]==-1){continue;}
+					if((dp[mask|(1<<i)][j])+paths[dirt_path[j]][dirt_path[i]]<min){min=dp[mask|(1<<i)][j]+paths[dirt_path[j]][dirt_path[i]];}
+				}
+			}
+			if(min==1000000){dp[mask][i]=-1;}
+			else{dp[mask][i]=min;}
+			
+		}
+	}
+}
 
 int main()
 {
@@ -96,7 +142,8 @@ int main()
 	}
 	int no_of_dirt=dirt.size();
 	int allmask=(1<<no_of_dirt)-1;
-	int mask=0;
+
+	int mask;
 	for(int i=0;i<h;i++)
 	{
 		for(int j=0;j<w;j++)
@@ -138,20 +185,21 @@ int main()
 		
 
 	}
-	int paths[100][100];
+	
 	for(int i=0;i<g.size();i++)
 	{
 		for(int j=0;j<g.size();j++)
 		{
 			paths[i][j]=-1;
 		}
-		cout<<endl;
 	}
-	cout<<g[6].size()<<" "<<g[6][0]<<" "<<g[6][1];
+	
 	map<int,vector<int> >::iterator it = g.begin();
 	for(;it!=g.end();++it)
 	{
-		bfs(g,it->first,paths);
+		cout<<"ff"<<it->first<<endl;
+		bfs(g,it->first);
+		cout<<"g";
 	}
 
 	cout<<"size"<<g.size()<<endl;
@@ -164,6 +212,36 @@ int main()
 		}
 		cout<<endl;
 	}
+	
+	memset(dp,-1,sizeof(dp));
+	cout<<endl;
+	cout<<allmask<<endl;
 
+	for(int i=0;i<no_of_dirt;i++)
+	{
+		mask=allmask;
+		mask=(mask) ^ ((1<<i));
+		dp[mask][i]=paths[start][dirt[i]];
+
+	}
+	for(int i=0;i<allmask;i++)
+	{
+		for(int j=0;j<no_of_dirt;j++)
+		{
+			cout<<dp[i][j]<<" ";
+
+		}
+		cout<<endl;
+	}
+	mask=0;
+	fill(no_of_dirt,mask,dirt);
+	for(int i=0;i<allmask;i++)
+	{
+		for(int j=0;j<no_of_dirt;j++)
+		{
+			cout<<dp[i][j]<<" ";
+		}
+		cout<<endl;
+	}
 
 }

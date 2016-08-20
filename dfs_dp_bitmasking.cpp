@@ -8,11 +8,11 @@ using namespace std;
 
 #define const 100;
 int paths[10000][10000];
-
+bool visited[10000];
 void bfs(map<int,vector<int> > g,int n)
 {
-	bool visited[100]={false};
-	
+	//visited={false};
+	memset(visited,false,sizeof(visited));
 		
 	visited[n]=true;
 	list<int> q;
@@ -26,12 +26,12 @@ void bfs(map<int,vector<int> > g,int n)
 	{
 		n=q.front();
 		q.pop_front();
-		//cout<<"n "<<n<<endl;
+		////cout<<"n "<<n<<endl;
 		
 		for(int i=0;i<g[n].size();i++)
 		{
-			//cout<<"edge "<<g[n][i]<<" "<<q.size()<<endl;
-			//cout<<visited[g[n][i]]<<endl;
+			////cout<<"edge "<<g[n][i]<<" "<<q.size()<<endl;
+			////cout<<visited[g[n][i]]<<endl;
 			
 			if(visited[g[n][i]]==1&&q.size()==0){break ;}
 			
@@ -41,7 +41,7 @@ void bfs(map<int,vector<int> > g,int n)
 				visited[g[n][i]]=true;
 				q.push_back(g[n][i]);
 				pred[g[n][i]]=n;
-				//cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
+				////cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
 			}
 			
 			
@@ -66,27 +66,27 @@ void bfs(map<int,vector<int> > g,int n)
 		while(temp!=x)
 		{
 			temp=pred[temp];
-			//cout<<temp<<" ";
+			////cout<<temp<<" ";
 			p++;
 			if(temp==it->first){flag=1;break;}
 		}
 
 		if(flag==1){flag=0;paths[n][it->first]=-1;continue;}
 		paths[x][it->first]=p;
-		//cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
+		////cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
 		p=0;
 
 	}
 
 	pred.clear();
-	cout<<"x="<<x<<endl;
-	return;
+	//cout<<"x="<<x<<endl;
+	
 }
 int dp[1000][1000];
 void fill(int dirtt,int mask,vector<int> dirt_path)
 {
 	int min;
-	cout<<mask<<endl;
+	//cout<<mask<<endl;
 	int count=0;
 	for(int l=0;l<dirtt;l++)
 	{
@@ -197,25 +197,25 @@ int main()
 	map<int,vector<int> >::iterator it = g.begin();
 	for(;it!=g.end();++it)
 	{
-		cout<<"ff"<<it->first<<endl;
+		//cout<<"ff"<<it->first<<endl;
 		bfs(g,it->first);
-		cout<<"g";
+		//cout<<"g";
 	}
 
-	cout<<"size"<<g.size()<<endl;
+	//cout<<"size"<<g.size()<<endl;
 
 	for(int i=0;i<g.size();i++)
 	{
 		for(int j=0;j<g.size();j++)
 		{
-			cout<<paths[i][j]<<" ";
+			//cout<<paths[i][j]<<" ";
 		}
-		cout<<endl;
+		//cout<<endl;
 	}
 	
 	memset(dp,-1,sizeof(dp));
-	cout<<endl;
-	cout<<allmask<<endl;
+	//cout<<endl;
+	//cout<<allmask<<endl;
 
 	for(int i=0;i<no_of_dirt;i++)
 	{
@@ -228,10 +228,10 @@ int main()
 	{
 		for(int j=0;j<no_of_dirt;j++)
 		{
-			cout<<dp[i][j]<<" ";
+			//cout<<dp[i][j]<<" ";
 
 		}
-		cout<<endl;
+		//cout<<endl;
 	}
 	mask=0;
 	fill(no_of_dirt,mask,dirt);
@@ -239,9 +239,14 @@ int main()
 	{
 		for(int j=0;j<no_of_dirt;j++)
 		{
-			cout<<dp[i][j]<<" ";
+			//cout<<dp[i][j]<<" ";
 		}
-		cout<<endl;
+		//cout<<endl;
 	}
-
+	int ans=dp[0][0];
+	for(int i=1;i<no_of_dirt;i++)
+	{
+		if(dp[0][i]<ans){ans=dp[0][i];}
+	}
+	cout<<ans<<endl;
 }

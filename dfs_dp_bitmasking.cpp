@@ -21,19 +21,30 @@ void bfs(map<int,vector<int> > g,int n)
 	int x=n;
 	int z;
 	map<int,int> pred;
-	//cout<<"traversing node"<<n<<endl;
+	cout<<"traversing node"<<n<<endl;
 	while(!q.empty())
 	{
 		n=q.front();
 		q.pop_front();
-		////cout<<"n "<<n<<endl;
+		cout<<"n "<<n<<endl;
 		
 		for(int i=0;i<g[n].size();i++)
 		{
-			////cout<<"edge "<<g[n][i]<<" "<<q.size()<<endl;
-			////cout<<visited[g[n][i]]<<endl;
-			
-			if(visited[g[n][i]]==1&&q.size()==0){break ;}
+			cout<<"edge "<<g[n][i]<<" "<<q.size()<<endl;
+			cout<<visited[g[n][i]]<<endl;
+			cout<<"there";
+			cout<<q.size()<<endl;
+
+
+
+
+
+
+
+			cout<<"here";
+			if(q.size()==0){cout<<"sfds";}
+			if(visited[g[n][i]]==1){cout<<"sd";}
+			if(visited[g[n][i]]==1 && q.size()==0){cout<<"d";break;}
 			
 			if(visited[g[n][i]]==0)
 			{
@@ -41,7 +52,7 @@ void bfs(map<int,vector<int> > g,int n)
 				visited[g[n][i]]=true;
 				q.push_back(g[n][i]);
 				pred[g[n][i]]=n;
-				////cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
+				cout<<"pred of "<<g[n][i]<<" is "<<n<<endl;
 			}
 			
 			
@@ -49,7 +60,7 @@ void bfs(map<int,vector<int> > g,int n)
 		
 		
 	}
-	
+	cout<<"h";
 	int temp;
 	int flag=0;
 	map<int,vector<int> >::iterator it = g.begin();
@@ -73,13 +84,13 @@ void bfs(map<int,vector<int> > g,int n)
 
 		if(flag==1){flag=0;paths[n][it->first]=-1;continue;}
 		paths[x][it->first]=p;
-		////cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
+		cout<<"path from "<<x<<"to"<<it->first<<"="<<p<<endl;
 		p=0;
 
 	}
 
 	pred.clear();
-	//cout<<"x="<<x<<endl;
+	cout<<"x="<<x<<endl;
 	
 }
 int dp[1000][1000];
@@ -222,6 +233,7 @@ int main()
 		mask=allmask;
 		mask=(mask) ^ ((1<<i));
 		dp[mask][i]=paths[start][dirt[i]];
+		cout<<paths[start][dirt[i]];
 
 	}
 	for(int i=0;i<allmask;i++)

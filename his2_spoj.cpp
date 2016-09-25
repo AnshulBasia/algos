@@ -28,7 +28,7 @@ int main()
 			{	
 				if(i==0)
 				{
-					if(maxx<heights[j]+abs(heights[j]-p[i]))
+					if(maxx<heights[j]+abs(heights[j]-p[i])-p[0])
 					{
 						maxx=heights[j]+abs(heights[j]-p[i]);
 						index=i;
@@ -46,13 +46,41 @@ int main()
 				}
 
 				if(i!=0&&i!=p.size())
-				{	if(maxx<abs(heights[j]-p[i-1])+abs(heights[j]-p[i]))
+				{	if(maxx<abs(heights[j]-p[i-1])+abs(heights[j]-p[i])-p[i-1])
 					{
 						maxx=abs(heights[j]-p[i-1])+abs(heights[j]-p[i]);
 						index=i;
 					}
 				}	
 			}
+			int count=0;
+			for(int i=0;i<p.size()+1;i++)
+			{	
+				if(i==0)
+				{
+					if(maxx==heights[j]+abs(heights[j]-p[i])-p[0])
+					{
+						count++;
+					}
+				
+				}
+				if(i==p.size())
+				{
+					if(maxx==heights[j]+abs(heights[j]-p[i-1]))
+					{
+						count++;
+					}
+				
+				}
+
+				if(i!=0&&i!=p.size())
+				{	if(maxx==abs(heights[j]-p[i-1])+abs(heights[j]-p[i])-p[i-1])
+					{
+						count++;
+					}
+				}	
+			}
+			cout<<"count"<<count<<endl;
 			//cout<<index<<" "<<heights[j]<<endl;
 			//cout<<maxx<<endl;
 			p.insert(p.begin()+index,heights[j]);

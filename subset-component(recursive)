@@ -1,0 +1,78 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <set>
+using namespace std;
+int n,total=0;
+vector<pair <int,int> > a;
+vector < vector<pair <int,int> > > b;
+int find(int parent[],int x){
+    if(parent[x]==-1){return x;}
+    return find(parent,parent[x]);
+}
+void recurse(int index,int p[],int r[]){
+    //cout<<index<<endl;
+    if(index==n){
+        for(int i=0;i<64;i++){
+            if(p[i]==-1){total++;}
+        }
+        return;
+    }
+    recurse(index+1,p,r);
+    int p_[64];
+    int r_[64];
+    for(int i=0;i<64;i++){
+        p_[i]=p[i];
+        r_[i]=r[i];
+    }
+    for(int i=0;i<b[index].size();i++){
+        int x=b[index][i].first;
+        int y=b[index][i].second;
+        
+        int a=find(p_,x);
+        int b=find(p_,y);
+        if(a!=b){
+            if(r_[a]<r_[b]){
+                p_[a]=b;
+            }
+            else if(r_[a]>r_[b]){
+                p_[b]=a;
+            }
+            else{
+                p_[a]=b;
+                r_[b]++;
+            }
+        }
+    }
+    recurse(index+1,p_,r_);
+}
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    cin>>n;
+    unsigned long long d[24];
+    for(int i=0;i<n;i++){
+        cin>>d[i];
+        a.clear();
+        int prev=-1;
+        for(int j=0;j<64;j++){
+            if((d[i]>>j)&1){
+                if(prev==-1){prev=j;}
+                else{
+                    a.push_back(make_pair(prev,j));
+                    prev=j;
+                }
+            }
+        }
+       b.push_back(a); 
+    }
+    int parent[64];
+    int rankk[64];
+    memset(&parent,-1,sizeof(parent));
+    memset(&rankk,0,sizeof(rankk));
+    recurse(0,parent,rankk);
+    cout<<total<<endl;
+    return 0;
+}
